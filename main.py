@@ -3,10 +3,6 @@ import os
 import sys
 from pynput.keyboard import Key, Listener
 
-file = os.path.join('test.c', '')
-
-
-
 def process_char(char, interval):
     if char == '<':
         pyautogui.hotkey("shift", ",")
@@ -73,5 +69,9 @@ class Autotyper:
     def destruct(self):
         self.file.close()
 
-a = Autotyper('test.c', title="temp")
-a.run()
+if __name__ == "__main__":
+    try:
+        out = Autotyper('test.c', title='temp')
+        out.run()
+    except Exception as error:
+        print(error)
