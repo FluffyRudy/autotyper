@@ -1,24 +1,30 @@
 import pyautogui
 import os
 import sys
+import re
 from pynput.keyboard import Key, Listener
+import time
 
-def process_char(char, interval):
+def process_char(char):
     if char == '<':
         pyautogui.hotkey("shift", ",")
     else:
-        pyautogui.write(char, interval)
+        pyautogui.write(char)
 
 def launch_temrinal():
     return os.system('gnome-terminal')
 
-def save_file():
-    pyautogui.hotkey("ctrl", "s")
-    pyautogui.hotkey("ctrl", "x")
+def fullscreen():
+    pyautogui.press("f11")
+
+def save_file(commands):
+    for command in commands:
+        print(*command)
+        pyautogui.hotkey(*command)
 
 def set_command(command, interval=0):
     for char in command:
-        process_char(char, interval=interval)
+        process_char(char)
     pyautogui.press("enter")
 
 def is_valid_file(filename):
@@ -31,7 +37,8 @@ def is_valid_file(filename):
 class Autotyper:
     NO_DELAY  = 0.0
     FAST_TYPE = 0.01
-    SLOW_TYPE = 0.03
+    NORMAL_TYPE = 0.05
+    SLOW_TYPE = 0.1
     def __init__(self, file_path, title):
         if not is_valid_file(file_path):
             print("File path doesnt exist\nQuitting....")
@@ -41,12 +48,21 @@ class Autotyper:
         self.output_file = title.strip() + os.path.splitext(file_path)[1]
         self.start = False
         self.listener = None
+
+        self.save_commands = [ ['ctrl', 's'], ['ctrl', 'x'] ]
     
     def type_file_content(self, interval):
-        filecontent = self.file.read()
-        for char in filecontent:
-            process_char(char, interval)
-                
+        while a := self.file.readline():
+            indexs_lt_braces = list( map( lambda x: x.span(), list(re.finditer('<', a))) )
+            if indexs_lt_braces:
+                start = 0
+                for index_1, index_2 in indexs_lt_braces:
+                    pyautogui.write(a[start:index_1])
+                    pyautogui.hotkey("shift", ",") 
+                    start = index_2
+                pyautogui.write(a[start:], interval)
+            else:
+                pyautogui.write(a, interval)
 
     def detect_start(self, key):
         if key == Key.enter and self.listener is not None:
@@ -62,8 +78,9 @@ class Autotyper:
 
         if os.path.exists(self.output_file):
             os.remove(self.output_file)
-        set_command(f"nano {self.output_file}", self.SLOW_TYPE)
+        set_command(f"nano {self.output_file}")
         self.type_file_content(self.NO_DELAY)
+        save_file(self.save_commands)
         self.destruct()
 
     def destruct(self):
@@ -71,7 +88,7 @@ class Autotyper:
 
 if __name__ == "__main__":
     try:
-        out = Autotyper('test.c', title='temp')
+        out = Autotyper('main.py', title='autotype')
         out.run()
     except Exception as error:
         print(error)
