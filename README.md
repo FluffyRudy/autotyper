@@ -1,20 +1,17 @@
 # AutoTyper
 
-AutoTyper is a simple autotyping program made using Python. It's currently under development and works for Linux with X-server. It hasn't been tested on Mac yet.
-
+AutoTyper is a simple autotyping program made using Python. It simulates keyboard typing, which can be useful in various scenarios. The program is currently under development and works for Linux with X-server. It hasn't been tested on Mac yet.
 
 ## Installation
 
 Follow these steps to install and run the program:
 
-1. Clone the repository: **https://github.com/FluffyRudy/autotyper**
-2. Goto autotype directory: `cd autotyper`
-2. Run `pip install -r requirements.txt` 
+1. Clone the repository: `git clone https://github.com/FluffyRudy/autotyper`
+2. Go to the autotyper directory: `cd autotyper`
+3. Run `pip install -r requirements.txt` 
    If this fails then:
-   1. first create virtual environment using `python3 -m venv env`
-   2. activate environment using: `source ./env/bin/activate`
-   3. then rerun `pip install -r requirements.txt`
-3. python3 main.py
-4. Press enter once more after program run to start autotyping
-
-
+   1. First create a virtual environment using `python3 -m venv env`
+   2. Activate the environment using: `source ./env/bin/activate`
+   3. Then rerun `pip install -r requirements.txt`
+4. Run the program: `python3 main.py`
+5. Press enter once more after the program runs to start autotyping
