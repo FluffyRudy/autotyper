@@ -21,5 +21,5 @@ Follow these steps to install and run the program:
    1. First create a virtual environment using `python3 -m venv env`
    2. Activate the environment using: `source ./env/bin/activate`
    3. Then rerun `pip install -r requirements.txt`
-4. Run the program: `python3 main py <existing filePath> <output name without extension> <speed 0 or 1 or 2>`
+4. Run the program: `python3 main.py <existing filePath> <output name without extension> <speed 0 or 1 or 2>`
 5. Press enter once more after the program runs to start autotyping
