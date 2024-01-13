@@ -86,7 +86,7 @@ class Autotyper:
         if os.path.exists(self.output_file):
             os.remove(self.output_file)
 
-        # fullscreen()
+        fullscreen()
         set_command(f"nano {self.output_file}")
         self.type_file_content(self.speed)
         save_file(self.save_commands)
