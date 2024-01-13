@@ -35,29 +35,28 @@ def is_valid_file(filename):
     return True
 
 class Autotyper:
+    is_inturrepted = False
     TYPE_SPEED = (0.0, 0.01, 0.05, 0.1)
     AVILABLE_SPEED_COUNT = len(TYPE_SPEED)
     def __init__(self, file_path, output_filename, speed=0):
         if not is_valid_file(file_path):
-            print(file_path)
-            print(f"{file_path} : File/path doesnt exist\nQuitting....")
+            print("File path doesnt exist\nQuitting....")
             sys.exit()
         try:
             speed = abs(int(speed))
         except ValueError:
             print("Expected integer")
             sys.exit()
-        
+
         self.file = open(file_path, mode='r')
         self.output_file = output_filename.strip() + os.path.splitext(file_path)[1]
         self.start = False
         self.listener = None
-        self.speed = speed % self.AVILABLE_SPEED_COUNT if speed < 4 else random.choice(self.TYPE_SPEED)
-
+        self.speed = self.TYPE_SPEED[speed % self.AVILABLE_SPEED_COUNT] if speed < 4 else random.choice(self.TYPE_SPEED)
         self.save_commands = [ ['ctrl', 's'], ['ctrl', 'x'] ]
 
     def type_file_content(self, interval):
-        while a := self.file.readline():
+        while (a := self.file.readline()) and not self.is_inturrepted:
             indexs_lt_braces = list( map( lambda x: x.span(), list(re.finditer('<', a))) )
             if indexs_lt_braces:
                 start = 0
@@ -68,6 +67,9 @@ class Autotyper:
                 pyautogui.write(a[start:], interval)
             else:
                 pyautogui.write(a, interval)
+        else:
+            if self.is_inturrepted:
+                self.destruct()
 
     def detect_start(self, key):
         if key == Key.enter and self.listener is not None:
@@ -84,7 +86,7 @@ class Autotyper:
         if os.path.exists(self.output_file):
             os.remove(self.output_file)
 
-        fullscreen()
+        # fullscreen()
         set_command(f"nano {self.output_file}")
         self.type_file_content(self.speed)
         save_file(self.save_commands)
@@ -92,4 +94,4 @@ class Autotyper:
 
     def destruct(self):
         self.file.close()
-
+        sys.exit()
