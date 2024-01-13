@@ -1,6 +1,6 @@
 # AutoTyper
 
-AutoTyper is a simple autotyping program made using Python. It simulates keyboard typing, which can be useful in various scenarios. The program is currently under development and works for Linux with X-server. It hasn't been tested on Mac yet.
+AutoTyper is a simple autotyping program made using Python. It simulates keyboard typing, which can be useful in various scenarios. The program is currently under development and works for Linux with X-server(Doesnt work on wayland). It hasn't been tested on Mac yet. 
 
 ## Features
  - Simple code so it is easily customizable
